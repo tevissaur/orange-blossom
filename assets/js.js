@@ -63,6 +63,13 @@ function compTurn() {
     console.log('comp', i, choice)
 }
 
+function catsGame() {
+
+}
+
+function endGame() {
+    
+}
 
 function startGame(side) {
     startButton.style.visibility = 'hidden'
@@ -71,6 +78,7 @@ function startGame(side) {
             tile[i].className = 'tile ' + player.side
             console.log('Player', i, tile[i].id)
             delete tileNames[i]
+            console.log(tileNames.length)
             compTurn()
         })
     }
