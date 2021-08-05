@@ -8,7 +8,7 @@ let numChoices = 0;
 
 // Define Player Object
 const player = {
-    firstName: 'Tevis',
+    firstName: 'Player',
     side: undefined,
     selectedTiles: []
 }
@@ -47,11 +47,15 @@ function playerTurn(side) {
     startButton.style.visibility = 'hidden'
     for (let i = 0; i < tile.length; i++) {
         tile[i].addEventListener('click', function () {
+            
+            // If this returns true, it tells the player to select another tile.
             if (!checkIfSelected(tile[i].id)) {
                 tile[i].className = 'tile ' + player.side
                 player.selectedTiles.push(tile[i].id)
                 player.selectedTiles.reverse()
-                // Checking if values are correct
+
+
+                // Tracking selections and selected tiles
                 console.log('Player', i, tile[i].id)
                 console.log('Player', player.selectedTiles)
                 compTurn()
@@ -68,19 +72,20 @@ async function compTurn() {
     var i = Math.floor(Math.random() * tile.length)
     let choice = tile[i].id
 
-    /* 
-    Make sure the computer is not picking 
-    a square that has already been picked
-    */
-    // TODO: FIND A WAY TO REMOVE ITEMS FROM tileNames LIST
+    // Sleep provides a feeling that the computer is taking its time.
     await sleep(750)
+
+    // Was running into errors, just trying to catch them. Should be fine now.
     try {
+
+        // If this returns true, it runs this function again.
         if (!checkIfSelected(choice)) {
             tile[i].className = 'tile ' + comp.side
             comp.selectedTiles.push(choice)
             comp.selectedTiles.reverse()
             currentTurn.innerHTML = 'Your Turn'
-            // Checking if values are correct
+
+            // Tracking selections and selected tiles
             console.log('Comp', i, choice)
             console.log('Comp', comp.selectedTiles)
         } else {
@@ -93,14 +98,21 @@ async function compTurn() {
     }
 }
 
+
+// Checks if the selected tile has already been selected by the comp or player. Returns a boolean. 
+// It works most of the time, but every once in a while the computer will choose a tile selected by the player.
 function checkIfSelected(choice) {
     var bool = false
+
+    // Iterates through selected computer tiles
     for (var c = 0; c < comp.selectedTiles.length; c++) {
         if (comp.selectedTiles[c] === choice) {
             bool = true
             return bool
         }
     }
+
+    // Iterates through selected player tiles
     for (var p = 0; p < comp.selectedTiles.length; p++) {
         if (player.selectedTiles[p] === choice) {
             bool = true
@@ -111,6 +123,7 @@ function checkIfSelected(choice) {
 
 }
 
+// TODO: Create win conditions
 
 function catsGame() {
 
