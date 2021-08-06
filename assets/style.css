@@ -4,12 +4,13 @@ header {
 button {
     margin: 10px;
 }
-.board {
+#board {
     display: flex;
     margin: auto;
     flex-wrap: wrap;
     width: 306px;
     height: fit-content;
+    visibility: hidden;
 }
 
 .tile {

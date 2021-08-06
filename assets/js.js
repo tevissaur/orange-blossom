@@ -7,13 +7,13 @@ let turnIndicator = document.getElementById('comp-think')
 let currentTurn = true
 let numChoices = 0;
 let winConditions = [["top-left", "top-mid", "top-right"],
-                     ["top-left", "center", "bot-right"], 
-                     ["top-left", "mid-left", "bot-left"],
-                     ["mid-left", "center", "mid-right"],
-                     ["bot-left", "center", "top-right"]
-                     ["bot-left", "bot-mid", "bot-right"],
-                     ["top-mid", "center", "bot-mid"],
-                     ["top-right", "mid-right", "bot-right"]]
+["top-left", "center", "bot-right"],
+["top-left", "mid-left", "bot-left"],
+["mid-left", "center", "mid-right"],
+["bot-left", "center", "top-right"],
+["bot-left", "bot-mid", "bot-right"],
+["top-mid", "center", "bot-mid"],
+["top-right", "mid-right", "bot-right"]]
 
 // Define Player Object
 const player = {
@@ -49,11 +49,12 @@ startButton.addEventListener("click", function chooseSide() {
         document.getElementById('player-side').innerHTML = player.firstName + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
         playerTurn(player.side)
     }
+    startButton.style.visibility = 'hidden'
+    document.getElementById('board').style.visibility = 'visible'
 })
 
 // Player turn
 function playerTurn(side) {
-    startButton.style.visibility = 'hidden'
     if (currentTurn) {
         for (let i = 0; i < tile.length; i++) {
             tile[i].addEventListener('click', function () {
@@ -62,14 +63,16 @@ function playerTurn(side) {
                 if (!checkIfSelected(tile[i].id)) {
                     tile[i].className = 'tile ' + player.side
                     player.selectedTiles.push(tile[i].id)
-                    player.selectedTiles.reverse()
+                    player.selectedTiles.sort()
 
 
                     // Tracking selections and selected tiles
                     console.log('Player', i, tile[i].id)
                     console.log('Player', player.selectedTiles)
+
+                    // Checking if selected tiles trigger win condidtions
+                    checkWin('Player',player.selectedTiles)
                     catsGame()
-                    endGame(player.selectedTiles)
                     compTurn()
 
                 } else {
@@ -100,17 +103,20 @@ async function compTurn() {
             // Manipulating DOM
             tile[i].className = 'tile ' + comp.side
             comp.selectedTiles.push(choice)
-            comp.selectedTiles.reverse()
+            comp.selectedTiles.sort()
             currentTurn = true
             turnIndicator.innerHTML = 'Your Turn'
 
             // Tracking selections and selected tiles
             console.log('Comp', i, choice)
             console.log('Comp', comp.selectedTiles)
+
+            // Checking if selected tiles trigger win condidtions
+            checkWin('Comp',comp.selectedTiles)
+            catsGame()
+
         } else {
             compTurn()
-            endGame(comp.selectedTiles)
-            catsGame()
         }
 
     }
@@ -153,18 +159,31 @@ function catsGame() {
 
 }
 
-function endGame(selectedTiles) {
-    console.log(JSON.stringify(selectedTiles))
-    for (var w = 0;  w < winConditions.length; w++) {
-        if (JSON.stringify(selectedTiles) == JSON.stringify(winConditions[w])){
-            console.log(selectedTiles)
-            console.log(winConditions[w])
-            console.log('win?')
+function checkWin(who, selectedTiles) {
+
+    let winCounter = 0
+
+    for (var winIndex = 0; winIndex < winConditions.length; winIndex++) {
+
+        winConditions[winIndex].sort()
+        console.log(who, winConditions[winIndex])
+
+        for (var tileIndex = 0; tileIndex < selectedTiles.length; tileIndex++) {
+
+            if ( ( winConditions[winIndex].includes(selectedTiles[tileIndex]) ) || ( selectedTiles.includes(winConditions[winIndex][tileIndex]) ) ) {
+
+                console.log(winConditions[winIndex][tileIndex], selectedTiles)
+            }
         }
     }
 }
 
 
+// var array1 = ["top-left", "top-mid", "top-right"]
+// var array2 = ["top-left", "top-mid", "top-right", "bot-left"]
 
+// array1.sort()
+// array2.sort()
 
-
+// console.log(array1, array2)
+// console.log(array1.includes(array2), array2.includes(array1))
