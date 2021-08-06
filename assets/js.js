@@ -3,8 +3,17 @@
 let tile = document.getElementsByClassName('tile');
 let sides = ['X', 'O'];
 let startButton = document.getElementById('start');
-let currentTurn = document.getElementById('comp-think')
+let turnIndicator = document.getElementById('comp-think')
+let currentTurn = true
 let numChoices = 0;
+let winConditions = [["top-left", "top-mid", "top-right"],
+                     ["top-left", "center", "bot-right"], 
+                     ["top-left", "mid-left", "bot-left"],
+                     ["mid-left", "center", "mid-right"],
+                     ["bot-left", "center", "top-right"]
+                     ["bot-left", "bot-mid", "bot-right"],
+                     ["top-mid", "center", "bot-mid"],
+                     ["top-right", "mid-right", "bot-right"]]
 
 // Define Player Object
 const player = {
@@ -20,7 +29,7 @@ const comp = {
 
 // Sleep function
 function sleep(ms) {
-    currentTurn.innerHTML = 'Computer is thinking.'
+    turnIndicator.innerHTML = 'Computer is thinking.'
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -45,25 +54,31 @@ startButton.addEventListener("click", function chooseSide() {
 // Player turn
 function playerTurn(side) {
     startButton.style.visibility = 'hidden'
-    for (let i = 0; i < tile.length; i++) {
-        tile[i].addEventListener('click', function () {
-            
-            // If this returns true, it tells the player to select another tile.
-            if (!checkIfSelected(tile[i].id)) {
-                tile[i].className = 'tile ' + player.side
-                player.selectedTiles.push(tile[i].id)
-                player.selectedTiles.reverse()
+    if (currentTurn) {
+        for (let i = 0; i < tile.length; i++) {
+            tile[i].addEventListener('click', function () {
+
+                // If this returns true, it tells the player to select another tile.
+                if (!checkIfSelected(tile[i].id)) {
+                    tile[i].className = 'tile ' + player.side
+                    player.selectedTiles.push(tile[i].id)
+                    player.selectedTiles.reverse()
 
 
-                // Tracking selections and selected tiles
-                console.log('Player', i, tile[i].id)
-                console.log('Player', player.selectedTiles)
-                compTurn()
-            } else {
-                currentTurn.innerHTML = 'That tile is already selected. Select another one.'
-            }
+                    // Tracking selections and selected tiles
+                    console.log('Player', i, tile[i].id)
+                    console.log('Player', player.selectedTiles)
+                    catsGame()
+                    endGame(player.selectedTiles)
+                    compTurn()
 
-        })
+                } else {
+                    turnIndicator.innerHTML = 'That tile is already selected. Select another one.'
+                }
+
+            })
+        }
+        currentTurn = false
     }
 }
 
@@ -72,24 +87,30 @@ async function compTurn() {
     var i = Math.floor(Math.random() * tile.length)
     let choice = tile[i].id
 
-    // Sleep provides a feeling that the computer is taking its time.
-    await sleep(750)
+
 
     // Was running into errors, just trying to catch them. Should be fine now.
     try {
 
         // If this returns true, it runs this function again.
         if (!checkIfSelected(choice)) {
+            // Sleep provides a feeling that the computer is taking its time.
+            await sleep(750)
+
+            // Manipulating DOM
             tile[i].className = 'tile ' + comp.side
             comp.selectedTiles.push(choice)
             comp.selectedTiles.reverse()
-            currentTurn.innerHTML = 'Your Turn'
+            currentTurn = true
+            turnIndicator.innerHTML = 'Your Turn'
 
             // Tracking selections and selected tiles
             console.log('Comp', i, choice)
             console.log('Comp', comp.selectedTiles)
         } else {
             compTurn()
+            endGame(comp.selectedTiles)
+            catsGame()
         }
 
     }
@@ -100,7 +121,10 @@ async function compTurn() {
 
 
 // Checks if the selected tile has already been selected by the comp or player. Returns a boolean. 
-// It works most of the time, but every once in a while the computer will choose a tile selected by the player.
+
+/* It works most of the time, but every once in a while the computer will choose a 
+tile selected by the player. SOLVED: in second for loop I was iterating through the 
+computer tiles */
 function checkIfSelected(choice) {
     var bool = false
 
@@ -113,7 +137,7 @@ function checkIfSelected(choice) {
     }
 
     // Iterates through selected player tiles
-    for (var p = 0; p < comp.selectedTiles.length; p++) {
+    for (var p = 0; p < player.selectedTiles.length; p++) {
         if (player.selectedTiles[p] === choice) {
             bool = true
             return bool
@@ -129,8 +153,15 @@ function catsGame() {
 
 }
 
-function endGame() {
-
+function endGame(selectedTiles) {
+    console.log(JSON.stringify(selectedTiles))
+    for (var w = 0;  w < winConditions.length; w++) {
+        if (JSON.stringify(selectedTiles) == JSON.stringify(winConditions[w])){
+            console.log(selectedTiles)
+            console.log(winConditions[w])
+            console.log('win?')
+        }
+    }
 }
 
 
