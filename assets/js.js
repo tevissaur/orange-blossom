@@ -17,7 +17,7 @@ let winConditions = [["top-left", "top-mid", "top-right"],
 
 // Define Player Object
 const player = {
-    firstName: 'Player',
+    name: 'Player',
     side: undefined,
     selectedTiles: []
 }
@@ -41,12 +41,12 @@ startButton.addEventListener("click", function chooseSide() {
     if (sides[i] === 'O') {
         player.side = sides[i]
         comp.side = 'X'
-        document.getElementById('player-side').innerHTML = player.firstName + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
+        document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
         playerTurn(player.side)
     } else {
         player.side = sides[i]
         comp.side = 'O'
-        document.getElementById('player-side').innerHTML = player.firstName + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
+        document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
         playerTurn(player.side)
     }
     startButton.style.visibility = 'hidden'
@@ -61,7 +61,7 @@ function playerTurn(side) {
 
                 // If this returns true, it tells the player to select another tile.
                 if (!checkIfSelected(tile[i].id)) {
-                    tile[i].className = 'tile ' + player.side
+                    tile[i].innerHTML = player.side
                     player.selectedTiles.push(tile[i].id)
                     player.selectedTiles.sort()
 
@@ -87,8 +87,7 @@ function playerTurn(side) {
 
 // Computer picks a square: async function allows the sleep function to work
 async function compTurn() {
-    var i = Math.floor(Math.random() * tile.length)
-    let choice = tile[i].id
+    let choice = tile[Math.floor(Math.random() * tile.length)]
 
 
 
@@ -96,19 +95,19 @@ async function compTurn() {
     try {
 
         // If this returns true, it runs this function again.
-        if (!checkIfSelected(choice)) {
+        if (!checkIfSelected(choice.id)) {
             // Sleep provides a feeling that the computer is taking its time.
             await sleep(750)
 
             // Manipulating DOM
-            tile[i].className = 'tile ' + comp.side
-            comp.selectedTiles.push(choice)
+            choice.innerHTML = comp.side
+            comp.selectedTiles.push(choice.id)
             comp.selectedTiles.sort()
             currentTurn = true
             turnIndicator.innerHTML = 'Your Turn'
 
             // Tracking selections and selected tiles
-            console.log('Comp', i, choice)
+            console.log('Comp', choice)
             console.log('Comp', comp.selectedTiles)
 
             // Checking if selected tiles trigger win condidtions
