@@ -26,8 +26,8 @@ const player = {
     turn: function (tile) {
         console.log(tile, tile.id)
         if (!player.isTurn) {
-            comp.isTurn = true
-            comp.turn()
+            // Prevents player from going before the computer completes it's turn
+            turnIndicator.innerHTML = 'Please wait your turn.'
         } else {
 
             // If this returns true, it tells the player to select another tile.
@@ -65,16 +65,12 @@ const comp = {
             if ( game.catsGame() ){
                 turnIndicator.innerHTML = "Cat's game. Play again?"
                 game.end()
-            }else if (!comp.isTurn) {
-                player.isTurn = true
-                player.turn()
-            }
-            else {
+            } else {
                 // If this returns true, it runs this function again.
                 if (!game.isSelected(choice.id)) {
 
                     // Sleep function simulates the computer thinking and taking its time
-                    await game.sleep(450)
+                    await game.sleep(500)
 
                     // Manipulating DOM
                     document.getElementById(choice.id).innerHTML = comp.side
