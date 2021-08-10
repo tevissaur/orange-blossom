@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="assets/style.css">
     <title>Tic Tac Toe</title>
 </head>
+
 <body>
     <header>
         <h1>
@@ -19,43 +21,71 @@
         <p id="comp-think">
 
         </p>
-        <button id="start" onclick="game.start()">
-            Start game!
+        <button class="cybr-btn" id="start" onclick="game.start()">
+            Start_<span aria-hidden></span>
+            <span aria-hidden class="cybr-btn__glitch">Game_</span>
+            <span aria-hidden class="cybr-btn__tag">R25</span>
         </button>
     </header>
-    <main>
+    <main id='board'>
 
-        <div id="board">
-            <div class="tile" id="top-left" onclick="player.turn(this)">
+        <button class="cybr-btn tile" id="top-left" onclick="player.turn(this)">
+            <span aria-hidden></span>
+            <span aria-hidden class="cybr-btn__glitch">&#8692;</span>
+            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
+        </button>
+        <button class="cybr-btn tile" id="top-mid" onclick="player.turn(this)">
+            <span aria-hidden></span>
+            <span aria-hidden class="cybr-btn__glitch">&#8692;</span>
+            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
+        </button>
+        <button class="tile cybr-btn" id="top-right" onclick="player.turn(this)">
+            <span aria-hidden></span>
+            <span aria-hidden class="cybr-btn__glitch">&#8692;</span>
+            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
+        </button>
+        <button class="tile cybr-btn" id="mid-left" onclick="player.turn(this)">
+            <span aria-hidden></span>
+            <span aria-hidden class="cybr-btn__glitch">&#8692;</span>
+            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
+        </button>
 
-            </div>
-            <div class="tile" id="top-mid" onclick="player.turn(this)">
+        <button class="tile cybr-btn" id="center" onclick="player.turn(this)">
+            <span aria-hidden></span>
+            <span aria-hidden class="cybr-btn__glitch">&#8692;</span>
+            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
+        </button>
+        <button class="tile cybr-btn" id="mid-right" onclick="player.turn(this)">
+            <span aria-hidden></span>
+            <span aria-hidden class="cybr-btn__glitch">&#8692;</span>
+            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
+        </button>
+        <button class="tile cybr-btn" id="bot-left" onclick="player.turn(this)">
+            <span aria-hidden></span>
+            <span aria-hidden class="cybr-btn__glitch">&#8692;</span>
+            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
+        </button>
+        <button class="tile cybr-btn" id="bot-mid" onclick="player.turn(this)">
+            <span aria-hidden></span>
+            <span aria-hidden class="cybr-btn__glitch">&#8692;</span>
+            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
+        </button>
+        <button class="tile cybr-btn " id="bot-right" onclick="player.turn(this)">
+            <span aria-hidden></span>
+            <span aria-hidden class="cybr-btn__glitch">&#8692;</span>
+            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
+        </button>
 
-            </div>
-            <div class="tile" id="top-right" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="mid-left" onclick="player.turn(this)">
-
-            </div>
-            
-            <div class="tile" id="center" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="mid-right" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="bot-left" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="bot-mid" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="bot-right" onclick="player.turn(this)">
-
-            </div>
-        </div>
     </main>
+    <footer>
+
+        <button class="cybr-btn">
+            Buttons<span aria-hidden>_</span>
+            <span aria-hidden class="cybr-btn__glitch">Buttons_</span>
+            <span aria-hidden class="cybr-btn__tag">R25</span>
+        </button>
+    </footer>
     <script src="assets/js.js"></script>
 </body>
+
 </html>

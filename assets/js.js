@@ -1,8 +1,15 @@
+// TODO: Login form
+//       Create Account
+//       Save info into cookies
+//       Change DOM to reflect cookie data
+
+
 
 // Defining variables
 const board = document.getElementById('board');
 const tiles = board.children;
-const sides = ['X', 'O'];
+const glitch = board.querySelector('span')
+const sides = ['X' + glitch.innerHTML, 'O' + glitch.innerHTML];
 const startButton = document.getElementById('start');
 const turnIndicator = document.getElementById('comp-think');
 let selectedTiles = [];
@@ -24,15 +31,18 @@ const player = {
     isTurn: false,
     won: false,
     turn: function (tile) {
-        console.log(tile, tile.id)
+        // Prevents player from going before the computer completes it's turn or if the game is over
         if (!player.isTurn) {
-            // Prevents player from going before the computer completes it's turn
-            turnIndicator.innerHTML = 'Please wait your turn.'
+            if (!game.game) {
+                turnIndicator.innerHTML = 'If you want to play again, press the start button.'
+            } else {
+                turnIndicator.innerHTML = 'Please wait your turn.'
+            }
         } else {
 
             // If this returns true, it tells the player to select another tile.
             if (!game.isSelected(tile.id)) {
-                tile.innerHTML = player.side
+                tile.innerText = player.side
                 selectedTiles.push(tile.id)
 
                 // Checking if selected tiles trigger win condidtions
@@ -62,7 +72,7 @@ const comp = {
         let choice = tiles[Math.floor(Math.random() * tiles.length)]
         // Was running into errors, just trying to catch them. Should be fine now.
         try {
-            if ( game.catsGame() ){
+            if (game.catsGame()) {
                 turnIndicator.innerHTML = "Cat's game. Play again?"
                 game.end()
             } else {
@@ -73,7 +83,7 @@ const comp = {
                     await game.sleep(500)
 
                     // Manipulating DOM
-                    document.getElementById(choice.id).innerHTML = comp.side
+                    document.getElementById(choice.id).innerText = comp.side
 
                     selectedTiles.push(choice.id)
 
@@ -101,6 +111,7 @@ const comp = {
 
 
 const game = {
+    game: false,
     sleep: function (ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     },
@@ -118,11 +129,17 @@ const game = {
     checkWin: async function (who) {
         console.log('Checking if ' + who.name + ' won.')
         for (w in winConditions) {
-            if ((document.getElementById(winConditions[w][0]).innerHTML === who.side) &&
-                (document.getElementById(winConditions[w][1]).innerHTML === who.side) &&
-                (document.getElementById(winConditions[w][2]).innerHTML === who.side)) {
+            console.log(document.getElementById(winConditions[w][0]).innerText)
+            console.log(document.getElementById(winConditions[w][1]).innerHTML)
+            console.log(document.getElementById(winConditions[w][2]).innerHTML)
+
+            if ((document.getElementById(winConditions[w][0]).innerText === who.side) &&
+                (document.getElementById(winConditions[w][1]).innerText === who.side) &&
+                (document.getElementById(winConditions[w][2]).innerText === who.side)) {
                 turnIndicator.innerHTML = who.name + ' has won! Play again?'
                 who.won = true
+                who.isTurn = false
+                game.end()
             }
         }
     },
@@ -141,7 +158,8 @@ const game = {
     reset: function () {
         selectedTiles = [];
         for (i in tiles) {
-            tiles[i].innerHTML = ''
+            console.log(tiles[i].innerText)
+            tiles[i].innerHTML = glitch.innerHTML
             console.log(tiles[i].innerHTML)
         };
         for (i in player) {
@@ -150,28 +168,29 @@ const game = {
             } else if (typeof i === Array) {
                 i = []
             }
-            console.log(i, player[i])
         };
         turnIndicator.innerHTML = 'Your turn!'
         player.isTurn = false;
         player.won = false;
         comp.isTurn = false;
         comp.won = false;
+        game.false;
 
     },
     start: function () {
         game.reset()
+        game.game = true
         let i = Math.floor(Math.random() * 2) // Assigning player side randomly
 
         // Applying the sides.
-        if (sides[i] === 'O') {
-            player.side = sides[i]
-            comp.side = 'X'
-            document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
+        if (sides[i] === sides[0]) {
+            player.side = sides[0]
+            comp.side = sides[1]
+            document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side[0] + ' and the computer is ' + comp.side[0] + '. Player goes first.'
         } else {
-            player.side = sides[i]
-            comp.side = 'O'
-            document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
+            player.side = sides[1]
+            comp.side = sides[0]
+            document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side[0] + ' and the computer is ' + comp.side[0] + '. Player goes first.'
         }
 
         // Showing the board and hiding the start button
@@ -180,22 +199,23 @@ const game = {
 
         player.isTurn = true
     },
-    catsGame: function() {
-        if ((((tiles[0].innerHTML) === comp.side) || ((tiles[0].innerHTML) === player.side)) &&
-        (((tiles[1].innerHTML) === comp.side) || ((tiles[1].innerHTML) === player.side)) && 
-        (((tiles[2].innerHTML) === comp.side) || ((tiles[2].innerHTML) === player.side)) &&
-        (((tiles[3].innerHTML) === comp.side) || ((tiles[3].innerHTML) === player.side)) &&
-        (((tiles[4].innerHTML) === comp.side) || ((tiles[4].innerHTML) === player.side)) &&
-        (((tiles[5].innerHTML) === comp.side) || ((tiles[5].innerHTML) === player.side)) &&
-        (((tiles[6].innerHTML) === comp.side) || ((tiles[6].innerHTML) === player.side)) &&
-        (((tiles[7].innerHTML) === comp.side) || ((tiles[7].innerHTML) === player.side)) && 
-        (((tiles[8].innerHTML) === comp.side) || ((tiles[8].innerHTML) === player.side))) {
+    catsGame: function () {
+        if ((((tiles[0].innerText) === comp.side) || ((tiles[0].innerText) === player.side)) &&
+            (((tiles[1].innerText) === comp.side) || ((tiles[1].innerText) === player.side)) &&
+            (((tiles[2].innerText) === comp.side) || ((tiles[2].innerText) === player.side)) &&
+            (((tiles[3].innerText) === comp.side) || ((tiles[3].innerText) === player.side)) &&
+            (((tiles[4].innerText) === comp.side) || ((tiles[4].innerText) === player.side)) &&
+            (((tiles[5].innerText) === comp.side) || ((tiles[5].innerText) === player.side)) &&
+            (((tiles[6].innerText) === comp.side) || ((tiles[6].innerText) === player.side)) &&
+            (((tiles[7].innerText) === comp.side) || ((tiles[7].innerText) === player.side)) &&
+            (((tiles[8].innerText) === comp.side) || ((tiles[8].innerText) === player.side))) {
             return true
         } else {
             return false
         }
     },
     end: function () {
+        this.game = false;
         startButton.style.visibility = 'visible';
     }
 }
