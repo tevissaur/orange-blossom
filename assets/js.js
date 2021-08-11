@@ -2,14 +2,15 @@
 //       Create Account
 //       Save info into cookies
 //       Change DOM to reflect cookie data
-
+// Adding in constructor functions, because all the objects just reference themselves recursively, which works. 
+// However, I want to have a game where you can create custom player profiles, or choose whether or not the player will face a computer or human.
 
 
 // Defining variables
 const board = document.getElementById('board');
 const tiles = board.children;
-const glitch = board.querySelector('span')
-const sides = ['X' + glitch.innerHTML, 'O' + glitch.innerHTML];
+const glitch = '\n            <span aria-hidden=\"\"></span>\n            <span aria-hidden=\"\" class=\"cybr-btn__glitch\">◺</span>\n            <span aria-hidden=\"\" class=\"cybr-btn__tag\">⇷</span>\n        '
+const sides = ['X ' + glitch, 'O ' + glitch];
 const startButton = document.getElementById('start');
 const turnIndicator = document.getElementById('comp-think');
 let selectedTiles = [];
@@ -42,7 +43,7 @@ const player = {
 
             // If this returns true, it tells the player to select another tile.
             if (!game.isSelected(tile.id)) {
-                tile.innerText = player.side
+                tile.innerHTML = player.side
                 selectedTiles.push(tile.id)
 
                 // Checking if selected tiles trigger win condidtions
@@ -83,7 +84,7 @@ const comp = {
                     await game.sleep(500)
 
                     // Manipulating DOM
-                    document.getElementById(choice.id).innerText = comp.side
+                    document.getElementById(choice.id).innerHTML = comp.side
 
                     selectedTiles.push(choice.id)
 
@@ -139,7 +140,7 @@ const game = {
                 turnIndicator.innerHTML = who.name + ' has won! Play again?'
                 who.won = true
                 who.isTurn = false
-                game.end()
+                game.end(who)
             }
         }
     },
@@ -158,8 +159,7 @@ const game = {
     reset: function () {
         selectedTiles = [];
         for (i in tiles) {
-            console.log(tiles[i].innerText)
-            tiles[i].innerHTML = glitch.innerHTML
+            tiles[i].innerHTML = glitch
             console.log(tiles[i].innerHTML)
         };
         for (i in player) {
@@ -167,29 +167,32 @@ const game = {
                 i = false
             } else if (typeof i === Array) {
                 i = []
+            } else if (typeof i === String) {
+                i = undefined
             }
         };
+        for (i in tiles) {
+
+        }
         turnIndicator.innerHTML = 'Your turn!'
         player.isTurn = false;
         player.won = false;
         comp.isTurn = false;
         comp.won = false;
-        game.false;
-
+        game.game = true;
     },
     start: function () {
         game.reset()
-        game.game = true
         let i = Math.floor(Math.random() * 2) // Assigning player side randomly
 
         // Applying the sides.
         if (sides[i] === sides[0]) {
-            player.side = sides[0]
-            comp.side = sides[1]
+            player.side = sides[0][0]
+            comp.side = sides[1][0]
             document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side[0] + ' and the computer is ' + comp.side[0] + '. Player goes first.'
         } else {
-            player.side = sides[1]
-            comp.side = sides[0]
+            player.side = sides[1][0]
+            comp.side = sides[0][0]
             document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side[0] + ' and the computer is ' + comp.side[0] + '. Player goes first.'
         }
 
@@ -214,11 +217,12 @@ const game = {
             return false
         }
     },
-    end: function () {
+    end: function (winner) {
         this.game = false;
         startButton.style.visibility = 'visible';
     }
 }
+
 
 
 // OLD CODE: Made the program more object oriented
