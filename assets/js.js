@@ -2,42 +2,50 @@
 //       Create Account
 //       Save info into cookies
 //       Change DOM to reflect cookie data
+
+
 // Adding in constructor functions, because all the objects just reference themselves recursively, which works. 
 // However, I want to have a game where you can create custom player profiles, or choose whether or not the player will face a computer or human.
 
 
 // Defining variables
-const board = document.getElementById('board');
-const tiles = board.children;
-const glitch = '\n            <span aria-hidden=\"\"></span>\n            <span aria-hidden=\"\" class=\"cybr-btn__glitch\">◺</span>\n            <span aria-hidden=\"\" class=\"cybr-btn__tag\">⇷</span>\n        '
-const sides = ['X ' + glitch, 'O ' + glitch];
-const startButton = document.getElementById('start');
-const turnIndicator = document.getElementById('comp-think');
+
+
+const sides = ['X', 'O']
 let selectedTiles = [];
-const winConditions = [["top-left", "top-mid", "top-right"], // All possible win conditions
-["top-left", "center", "bot-right"],
-["top-left", "mid-left", "bot-left"],
-["mid-left", "center", "mid-right"],
-["bot-left", "center", "top-right"],
-["bot-left", "bot-mid", "bot-right"],
-["top-mid", "center", "bot-mid"],
-["top-right", "mid-right", "bot-right"]]
+const winConditions = [
+    ["top-left", "top-mid", "top-right"], // All possible win conditions
+    ["top-left", "center", "bot-right"],
+    ["top-left", "mid-left", "bot-left"],
+    ["mid-left", "center", "mid-right"],
+    ["bot-left", "center", "top-right"],
+    ["bot-left", "bot-mid", "bot-right"],
+    ["top-mid", "center", "bot-mid"],
+    ["top-right", "mid-right", "bot-right"]
+]
 
 
-console.log(tiles)
+const board = {
+    elem: document.getElementById('board'),
+    startButton: document.getElementById('start'),
+    tileElem: document.getElementsByClassName('tile'),
+    turnIndicator: document.getElementById('comp-think')
+}
+
+
 // Define Player Object
 const player = {
     name: 'Player',
     side: undefined,
     isTurn: false,
     won: false,
-    turn: function (tile) {
+    turn: function(tile) {
         // Prevents player from going before the computer completes it's turn or if the game is over
         if (!player.isTurn) {
             if (!game.game) {
-                turnIndicator.innerHTML = 'If you want to play again, press the start button.'
+                board.turnIndicator.innerHTML = 'If you want to play again, press the start button.'
             } else {
-                turnIndicator.innerHTML = 'Please wait your turn.'
+                board.turnIndicator.innerHTML = 'Please wait your turn.'
             }
         } else {
 
@@ -55,7 +63,7 @@ const player = {
                 }
 
             } else {
-                turnIndicator.innerHTML = 'That tile is already selected. Select another one.'
+                board.turnIndicator.innerHTML = 'That tile is already selected. Select another one.'
             }
 
 
@@ -69,12 +77,12 @@ const comp = {
     side: undefined,
     isTurn: false,
     won: false,
-    turn: async function () {
-        let choice = tiles[Math.floor(Math.random() * tiles.length)]
-        // Was running into errors, just trying to catch them. Should be fine now.
+    turn: async function() {
+        let choice = board.tiles[Math.floor(Math.random() * board.tiles.length)]
+            // Was running into errors, just trying to catch them. Should be fine now.
         try {
             if (game.catsGame()) {
-                turnIndicator.innerHTML = "Cat's game. Play again?"
+                board.turnIndicator.innerHTML = "Cat's game. Play again?"
                 game.end()
             } else {
                 // If this returns true, it runs this function again.
@@ -97,8 +105,7 @@ const comp = {
                     }
 
 
-                }
-                else {
+                } else {
                     comp.turn()
                 }
 
@@ -113,21 +120,20 @@ const comp = {
 
 const game = {
     game: false,
-    sleep: function (ms) {
+    sleep: function(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     },
-    isSelected: function (choice, who) {
+    isSelected: function(choice, who) {
         var selected = false
 
         if (selectedTiles.includes(choice)) {
             selected = true
-        }
-        else {
+        } else {
             selected = false
         }
         return selected
     },
-    checkWin: async function (who) {
+    checkWin: async function(who) {
         console.log('Checking if ' + who.name + ' won.')
         for (w in winConditions) {
             console.log(document.getElementById(winConditions[w][0]).innerText)
@@ -137,30 +143,30 @@ const game = {
             if ((document.getElementById(winConditions[w][0]).innerText === who.side) &&
                 (document.getElementById(winConditions[w][1]).innerText === who.side) &&
                 (document.getElementById(winConditions[w][2]).innerText === who.side)) {
-                turnIndicator.innerHTML = who.name + ' has won! Play again?'
+                board.turnIndicator.innerHTML = who.name + ' has won! Play again?'
                 who.won = true
                 who.isTurn = false
                 game.end(who)
             }
         }
     },
-    nextTurn: function (current, next) {
+    nextTurn: function(current, next) {
         if (current.isTurn) {
             current.isTurn = false
             next.isTurn = true
             if (next.name === 'Computer') {
-                turnIndicator.innerHTML = 'Computer is thinking...'
+                board.turnIndicator.innerHTML = 'Computer is thinking...'
                 next.turn()
             } else {
-                turnIndicator.innerHTML = 'Your turn!'
+                board.turnIndicator.innerHTML = 'Your turn!'
             }
         }
     },
-    reset: function () {
+    reset: function() {
         selectedTiles = [];
-        for (i in tiles) {
-            tiles[i].innerHTML = glitch
-            console.log(tiles[i].innerHTML)
+        for (i in board.tiles) {
+            board.tiles[i].innerHTML = glitch
+            console.log(board.tiles[i].innerHTML)
         };
         for (i in player) {
             if (typeof i === Boolean) {
@@ -171,59 +177,60 @@ const game = {
                 i = undefined
             }
         };
-        for (i in tiles) {
+        for (i in board.tiles) {
 
         }
-        turnIndicator.innerHTML = 'Your turn!'
+        board.turnIndicator.innerHTML = 'Your turn!'
         player.isTurn = false;
         player.won = false;
         comp.isTurn = false;
         comp.won = false;
         game.game = true;
     },
-    start: function () {
-        game.reset()
-        let i = Math.floor(Math.random() * 2) // Assigning player side randomly
-
-        // Applying the sides.
-        if (sides[i] === sides[0]) {
-            player.side = sides[0][0]
-            comp.side = sides[1][0]
-            document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side[0] + ' and the computer is ' + comp.side[0] + '. Player goes first.'
-        } else {
-            player.side = sides[1][0]
-            comp.side = sides[0][0]
-            document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side[0] + ' and the computer is ' + comp.side[0] + '. Player goes first.'
-        }
-
-        // Showing the board and hiding the start button
-        startButton.style.visibility = 'hidden'
-        board.style.visibility = 'visible'
-
-        player.isTurn = true
-    },
-    catsGame: function () {
-        if ((((tiles[0].innerText) === comp.side) || ((tiles[0].innerText) === player.side)) &&
-            (((tiles[1].innerText) === comp.side) || ((tiles[1].innerText) === player.side)) &&
-            (((tiles[2].innerText) === comp.side) || ((tiles[2].innerText) === player.side)) &&
-            (((tiles[3].innerText) === comp.side) || ((tiles[3].innerText) === player.side)) &&
-            (((tiles[4].innerText) === comp.side) || ((tiles[4].innerText) === player.side)) &&
-            (((tiles[5].innerText) === comp.side) || ((tiles[5].innerText) === player.side)) &&
-            (((tiles[6].innerText) === comp.side) || ((tiles[6].innerText) === player.side)) &&
-            (((tiles[7].innerText) === comp.side) || ((tiles[7].innerText) === player.side)) &&
-            (((tiles[8].innerText) === comp.side) || ((tiles[8].innerText) === player.side))) {
+    catsGame: function() {
+        if ((((board.tiles[0].innerText) === comp.side) || ((board.tiles[0].innerText) === player.side)) &&
+            (((board.tiles[1].innerText) === comp.side) || ((board.tiles[1].innerText) === player.side)) &&
+            (((board.tiles[2].innerText) === comp.side) || ((board.tiles[2].innerText) === player.side)) &&
+            (((board.tiles[3].innerText) === comp.side) || ((board.tiles[3].innerText) === player.side)) &&
+            (((board.tiles[4].innerText) === comp.side) || ((board.tiles[4].innerText) === player.side)) &&
+            (((board.tiles[5].innerText) === comp.side) || ((board.tiles[5].innerText) === player.side)) &&
+            (((board.tiles[6].innerText) === comp.side) || ((board.tiles[6].innerText) === player.side)) &&
+            (((board.tiles[7].innerText) === comp.side) || ((board.tiles[7].innerText) === player.side)) &&
+            (((board.tiles[8].innerText) === comp.side) || ((board.tiles[8].innerText) === player.side))) {
             return true
         } else {
             return false
         }
     },
-    end: function (winner) {
+    start: function() {
+        game.reset()
+        let i = Math.floor(Math.random() * 2) // Assigning player side randomly
+
+        // Applying the sides.
+        if (sides[i] === sides[0]) {
+            player.side = sides[0]
+            comp.side = sides[1]
+            document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
+        } else {
+            player.side = sides[1]
+            comp.side = sides[0]
+            document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
+        }
+
+        // Showing the board and hiding the start button
+        board.startButton.style.visibility = 'hidden'
+        board.elem.style.visibility = 'visible'
+
+        player.isTurn = true
+    },
+
+    end: function(winner) {
         this.game = false;
         startButton.style.visibility = 'visible';
     }
 }
 
-
+board.startButton.addEventListener('click', game.start)
 
 // OLD CODE: Made the program more object oriented
 

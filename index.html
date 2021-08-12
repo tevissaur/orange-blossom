@@ -21,64 +21,32 @@
         <p id="comp-think">
 
         </p>
-        <button class="cybr-btn" id="start" onclick="game.start()">
-            Start_<span aria-hidden></span>
-            <span aria-hidden class="cybr-btn__glitch">Game_</span>
-            <span aria-hidden class="cybr-btn__tag">R25</span>
+        <button id="start">
+            Start
         </button>
     </header>
     <main id='board'>
 
-        <button class="cybr-btn tile" id="top-left" onclick="player.turn(this)">
-            <span aria-hidden></span>
-            <span aria-hidden class="cybr-btn__glitch">&#9722;</span>
-            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
-        </button>
-        <button class="cybr-btn tile" id="top-mid" onclick="player.turn(this)">
-            <span aria-hidden></span>
-            <span aria-hidden class="cybr-btn__glitch">&#9722;</span>
-            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
-        </button>
-        <button class="tile cybr-btn" id="top-right" onclick="player.turn(this)">
-            <span aria-hidden></span>
-            <span aria-hidden class="cybr-btn__glitch">&#9722;</span>
-            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
-        </button>
-        <button class="tile cybr-btn" id="mid-left" onclick="player.turn(this)">
-            <span aria-hidden></span>
-            <span aria-hidden class="cybr-btn__glitch">&#9722;</span>
-            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
-        </button>
-
-        <button class="tile cybr-btn" id="center" onclick="player.turn(this)">
-            <span aria-hidden></span>
-            <span aria-hidden class="cybr-btn__glitch">&#9722;</span>
-            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
-        </button>
-        <button class="tile cybr-btn" id="mid-right" onclick="player.turn(this)">
-            <span aria-hidden></span>
-            <span aria-hidden class="cybr-btn__glitch">&#9722;</span>
-            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
-        </button>
-        <button class="tile cybr-btn" id="bot-left" onclick="player.turn(this)">
-            <span aria-hidden></span>
-            <span aria-hidden class="cybr-btn__glitch">&#9722;</span>
-            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
-        </button>
-        <button class="tile cybr-btn" id="bot-mid" onclick="player.turn(this)">
-            <span aria-hidden></span>
-            <span aria-hidden class="cybr-btn__glitch">&#9722;</span>
-            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
-        </button>
-        <button class="tile cybr-btn " id="bot-right" onclick="player.turn(this)">
-            <span aria-hidden></span>
-            <span aria-hidden class="cybr-btn__glitch">&#9722;</span>
-            <span aria-hidden class="cybr-btn__tag">&#8695;</span>
-        </button>
+        <div class="tile" id="top-left">
+        </div>
+        <div class="tile" id="top-mid">
+        </div>
+        <div class="tile" id="top-right">
+        </div>
+        <div class="tile" id="mid-left">
+        </div>
+        <div class="tile" id="center">
+        </div>
+        <div class="tile" id="mid-right">
+        </div>
+        <div class="tile" id="bot-left">
+        </div>
+        <div class="tile" id="bot-mid">
+        </div>
+        <div class="tile " id="bot-right">
+        </div>
 
     </main>
-    <footer>
-    </footer>
     <script src="assets/js.js"></script>
 </body>
 
