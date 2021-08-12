@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="assets/style.css">
     <title>Tic Tac Toe</title>
 </head>
+
 <body>
     <header>
         <h1>
@@ -19,43 +21,33 @@
         <p id="comp-think">
 
         </p>
-        <button id="start" onclick="game.start()">
-            Start game!
+        <button id="start">
+            Start
         </button>
     </header>
-    <main>
+    <main id='board'>
 
-        <div id="board">
-            <div class="tile" id="top-left" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="top-mid" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="top-right" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="mid-left" onclick="player.turn(this)">
-
-            </div>
-            
-            <div class="tile" id="center" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="mid-right" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="bot-left" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="bot-mid" onclick="player.turn(this)">
-
-            </div>
-            <div class="tile" id="bot-right" onclick="player.turn(this)">
-
-            </div>
+        <div class="tile" id="top-left">
         </div>
+        <div class="tile" id="top-mid">
+        </div>
+        <div class="tile" id="top-right">
+        </div>
+        <div class="tile" id="mid-left">
+        </div>
+        <div class="tile" id="center">
+        </div>
+        <div class="tile" id="mid-right">
+        </div>
+        <div class="tile" id="bot-left">
+        </div>
+        <div class="tile" id="bot-mid">
+        </div>
+        <div class="tile " id="bot-right">
+        </div>
+
     </main>
     <script src="assets/js.js"></script>
 </body>
+
 </html>

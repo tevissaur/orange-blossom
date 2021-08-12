@@ -1,12 +1,17 @@
 header {
     text-align: center;
+    margin: auto;
+    width: 50%;
 }
+
 button {
     margin: 10px;
+    width: 50%;
 }
+
 #board {
     display: flex;
-    margin: auto;
+    margin: 5% auto;
     flex-wrap: wrap;
     width: 306px;
     height: fit-content;
@@ -25,14 +30,4 @@ button {
 .tile:hover {
     cursor: pointer;
     background-color: rgba(146, 204, 255, 0.377);
-}
-
-.X {
-    background-image: url(../assets/x.png);
-    height: 100px;
-}
-
-.O {
-    background-image: url(../assets/O.png);
-    height: 100px;
 }
