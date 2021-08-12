@@ -28,7 +28,7 @@ const winConditions = [
 const board = {
     elem: document.getElementById('board'),
     startButton: document.getElementById('start'),
-    tileElem: document.getElementsByClassName('tile'),
+    tiles: document.getElementsByClassName('tile'),
     turnIndicator: document.getElementById('comp-think')
 }
 
@@ -39,19 +39,20 @@ const player = {
     side: undefined,
     isTurn: false,
     won: false,
-    turn: function(tile) {
-        // Prevents player from going before the computer completes it's turn or if the game is over
+    turn: function(event) {
+        let tile = event.target
+            // Prevents player from going before the computer completes it's turn or if the game is over
         if (!player.isTurn) {
             if (!game.game) {
-                board.turnIndicator.innerHTML = 'If you want to play again, press the start button.'
+                board.turnIndicator.innerText = 'If you want to play again, press the start button.'
             } else {
-                board.turnIndicator.innerHTML = 'Please wait your turn.'
+                board.turnIndicator.innerText = 'Please wait your turn.'
             }
         } else {
 
             // If this returns true, it tells the player to select another tile.
             if (!game.isSelected(tile.id)) {
-                tile.innerHTML = player.side
+                tile.innerText = player.side
                 selectedTiles.push(tile.id)
 
                 // Checking if selected tiles trigger win condidtions
@@ -63,7 +64,7 @@ const player = {
                 }
 
             } else {
-                board.turnIndicator.innerHTML = 'That tile is already selected. Select another one.'
+                board.turnIndicator.innerText = 'That tile is already selected. Select another one.'
             }
 
 
@@ -82,7 +83,7 @@ const comp = {
             // Was running into errors, just trying to catch them. Should be fine now.
         try {
             if (game.catsGame()) {
-                board.turnIndicator.innerHTML = "Cat's game. Play again?"
+                board.turnIndicator.innerText = "Cat's game. Play again?"
                 game.end()
             } else {
                 // If this returns true, it runs this function again.
@@ -92,7 +93,7 @@ const comp = {
                     await game.sleep(500)
 
                     // Manipulating DOM
-                    document.getElementById(choice.id).innerHTML = comp.side
+                    document.getElementById(choice.id).innerText = comp.side
 
                     selectedTiles.push(choice.id)
 
@@ -137,13 +138,13 @@ const game = {
         console.log('Checking if ' + who.name + ' won.')
         for (w in winConditions) {
             console.log(document.getElementById(winConditions[w][0]).innerText)
-            console.log(document.getElementById(winConditions[w][1]).innerHTML)
-            console.log(document.getElementById(winConditions[w][2]).innerHTML)
+            console.log(document.getElementById(winConditions[w][1]).innerText)
+            console.log(document.getElementById(winConditions[w][2]).innerText)
 
             if ((document.getElementById(winConditions[w][0]).innerText === who.side) &&
                 (document.getElementById(winConditions[w][1]).innerText === who.side) &&
                 (document.getElementById(winConditions[w][2]).innerText === who.side)) {
-                board.turnIndicator.innerHTML = who.name + ' has won! Play again?'
+                board.turnIndicator.innerText = who.name + ' has won! Play again?'
                 who.won = true
                 who.isTurn = false
                 game.end(who)
@@ -155,18 +156,17 @@ const game = {
             current.isTurn = false
             next.isTurn = true
             if (next.name === 'Computer') {
-                board.turnIndicator.innerHTML = 'Computer is thinking...'
+                board.turnIndicator.innerText = 'Computer is thinking...'
                 next.turn()
             } else {
-                board.turnIndicator.innerHTML = 'Your turn!'
+                board.turnIndicator.innerText = 'Your turn!'
             }
         }
     },
     reset: function() {
         selectedTiles = [];
         for (i in board.tiles) {
-            board.tiles[i].innerHTML = glitch
-            console.log(board.tiles[i].innerHTML)
+            board.tiles[i].innerText = ''
         };
         for (i in player) {
             if (typeof i === Boolean) {
@@ -180,7 +180,7 @@ const game = {
         for (i in board.tiles) {
 
         }
-        board.turnIndicator.innerHTML = 'Your turn!'
+        board.turnIndicator.innerText = 'Your turn!'
         player.isTurn = false;
         player.won = false;
         comp.isTurn = false;
@@ -210,11 +210,11 @@ const game = {
         if (sides[i] === sides[0]) {
             player.side = sides[0]
             comp.side = sides[1]
-            document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
+            document.getElementById('player-side').innerText = player.name + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
         } else {
             player.side = sides[1]
             comp.side = sides[0]
-            document.getElementById('player-side').innerHTML = player.name + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
+            document.getElementById('player-side').innerText = player.name + ' is ' + player.side + ' and the computer is ' + comp.side + '. Player goes first.'
         }
 
         // Showing the board and hiding the start button
@@ -226,10 +226,13 @@ const game = {
 
     end: function(winner) {
         this.game = false;
-        startButton.style.visibility = 'visible';
+        board.startButton.style.visibility = 'visible';
     }
 }
 
+for (let i = 0; i < board.tiles.length; i++) {
+    board.tiles[i].addEventListener('click', player.turn)
+}
 board.startButton.addEventListener('click', game.start)
 
 // OLD CODE: Made the program more object oriented
